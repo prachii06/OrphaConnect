@@ -1,43 +1,45 @@
 import React, { useState } from 'react';
 
 const VolunteerReg = () => {
-  const [volunteerInfo, setVolunteerInfo] = useState({
+  const [formData, setFormData] = useState({
     name: '',
-    email: '',
+    skills: '',
     availability: '',
-    expertise: '',
   });
 
-  const handleRegister = () => {
-    // Handle registration logic (e.g., send to backend)
-    alert(`Thank you for registering as a volunteer, ${volunteerInfo.name}`);
-  };
-
-  const handleChange = (e) => {
-    setVolunteerInfo({ ...volunteerInfo, [e.target.name]: e.target.value });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    alert('Volunteer Registration Submitted!');
   };
 
   return (
-    <div>
-      <h2>Volunteer Registration</h2>
-      <form>
-        <div>
-          <label>Name: </label>
-          <input type="text" name="name" value={volunteerInfo.name} onChange={handleChange} required />
-        </div>
-        <div>
-          <label>Email: </label>
-          <input type="email" name="email" value={volunteerInfo.email} onChange={handleChange} required />
-        </div>
-        <div>
-          <label>Availability: </label>
-          <input type="text" name="availability" value={volunteerInfo.availability} onChange={handleChange} required />
-        </div>
-        <div>
-          <label>Expertise: </label>
-          <input type="text" name="expertise" value={volunteerInfo.expertise} onChange={handleChange} />
-        </div>
-        <button type="button" onClick={handleRegister}>Register as Volunteer</button>
+    <div className="p-6 max-w-md">
+      <h2 className="text-xl font-bold mb-4">Volunteer Registration</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <input
+          className="w-full p-2 border rounded"
+          type="text"
+          placeholder="Your Name"
+          value={formData.name}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+        />
+        <input
+          className="w-full p-2 border rounded"
+          type="text"
+          placeholder="Your Skills"
+          value={formData.skills}
+          onChange={(e) => setFormData({ ...formData, skills: e.target.value })}
+        />
+        <input
+          className="w-full p-2 border rounded"
+          type="text"
+          placeholder="Availability (e.g. Weekends)"
+          value={formData.availability}
+          onChange={(e) => setFormData({ ...formData, availability: e.target.value })}
+        />
+        <button type="submit" className="bg-indigo-600 text-white px-4 py-2 rounded">
+          Submit
+        </button>
       </form>
     </div>
   );

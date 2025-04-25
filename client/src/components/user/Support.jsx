@@ -1,24 +1,38 @@
 import React, { useState } from 'react';
 
 const Support = () => {
-  const [supportType, setSupportType] = useState('');
+  const [formData, setFormData] = useState({ name: '', message: '' });
+  const [submitted, setSubmitted] = useState(false);
 
-  const handleSupport = () => {
-    // Handle support submission logic (e.g., send to backend)
-    alert(`You have offered your support as: ${supportType}`);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSubmitted(true);
+    // Later: send formData to backend
   };
 
   return (
-    <div>
-      <h2>Offer Your Support</h2>
-      <p>Select the type of support you would like to offer:</p>
-      <select value={supportType} onChange={(e) => setSupportType(e.target.value)}>
-        <option value="">Select Support Type</option>
-        <option value="Resources">Resources</option>
-        <option value="Time">Time</option>
-        <option value="Mentorship">Mentorship</option>
-      </select>
-      <button onClick={handleSupport}>Submit Support</button>
+    <div className="p-6">
+      <h2 className="text-xl font-bold mb-4">Support / Contact Us</h2>
+      {submitted ? (
+        <p className="text-green-600">Thanks for reaching out! We'll get back to you soon.</p>
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
+          <input
+            type="text"
+            placeholder="Your Name"
+            className="w-full p-2 border rounded"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          />
+          <textarea
+            placeholder="Your Message"
+            className="w-full p-2 border rounded"
+            value={formData.message}
+            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+          ></textarea>
+          <button type="submit" className="bg-indigo-600 text-white px-4 py-2 rounded">Send</button>
+        </form>
+      )}
     </div>
   );
 };

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -10,38 +12,39 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    
-    // Basic validation (you can replace this with actual login API later)
     if (!email || !password || !role) {
       setError('Please fill in all fields.');
       return;
     }
 
-    console.log('Logging in with:', email, password, role);
-    setError('');
-    
-    // Role-based redirection
-    if (role === 'admin') {
-      // Navigate to admin dashboard
-      navigate('/admin-dashboard');
-    } else if (role === 'moderator') {
-      // Navigate to moderator dashboard
-      navigate('/moderator-dashboard');
-    } else if (role === 'user') {
-      // Navigate to user dashboard
-      navigate('/user-dashboard');
-    } else {
-      setError('Invalid role selected.');
-    }
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      console.log('Logged in as:', user.email);
+      setError('');
 
-    // TODO: Replace with actual login/auth logic and role verification
+      // Redirect based on role
+      if (role === 'admin') {
+        navigate('/admin-dashboard');
+      } else if (role === 'moderator') {
+        navigate('/moderator-dashboard');
+      } else if (role === 'user') {
+        navigate('/user-dashboard');
+      } else {
+        setError('Invalid role selected.');
+      }
+
+    } catch (err) {
+      console.error(err.message);
+      setError('Login failed. Please check your credentials.');
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-indigo-100 px-4">
-      <motion.div 
+      <motion.div
         className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -111,7 +114,7 @@ const Login = () => {
 
         <p className="mt-4 text-sm text-center text-gray-600">
           Don’t have an account?{' '}
-          <span 
+          <span
             className="text-indigo-600 hover:underline cursor-pointer"
             onClick={() => navigate('/register')}
           >
@@ -124,3 +127,4 @@ const Login = () => {
 };
 
 export default Login;
+
