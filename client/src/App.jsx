@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 
 import Home from './pages/Home';
 import Login from './pages/Login';
-import Donate from './pages/Donate';
+// import Donate from './pages/Donation';
 import Profile from './pages/Profile';
 import Register from './pages/Register';
 import UserDashboard from './pages/UserDashboard';
@@ -17,23 +17,20 @@ import ManageDonations from './components/admin/ManageDonations';
 import ViewReports from './components/admin/ViewReports';
 import Settings from './components/admin/Settings';
 
-// Moderator routes
-import DonationManagement from './components/moderator/DonationManagement';
-import EducationMonitoring from './components/moderator/EducationMonitoring';
-import ModerationReports from './components/moderator/ModerationReports';
 
 // User routes
 import Events from './components/user/Events';
 import ManageProfile from './components/user/ManageProfile';
 import Support from './components/user/Support';
 import VolunteerReg from './components/user/VolunteerReg';
+import Donate from './components/user/Donate';
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/donate" element={<Donate />} />
+      {/* <Route path="/donate" element={<Donation/>} /> */}
       <Route path="/children" element={<Profile />} />
       <Route path="/register" element={<Register />} />
 
@@ -43,14 +40,10 @@ function App() {
         <Route path="profile" element={<ManageProfile />} />
         <Route path="support" element={<Support />} />
         <Route path="volunteer" element={<VolunteerReg />} />
+        <Route path="donate" element={<Donate />} />
       </Route>
 
-      {/* Moderator Dashboard Routes */}
-      <Route path="/moderator-dashboard" element={<ModeratorDashboard />}>
-        <Route path="donations" element={<DonationManagement />} />
-        <Route path="education" element={<EducationMonitoring />} />
-        <Route path="reports" element={<ModerationReports />} />
-      </Route>
+     
 
       {/* Admin Dashboard Routes */}
       <Route path="/admin-dashboard" element={<AdminDashboard />}>
@@ -65,3 +58,4 @@ function App() {
 }
 
 export default App;
+

@@ -1,13 +1,24 @@
 import React, { useState } from 'react';
+import { db } from "../../firebase"; // Import your Firestore instance
+import { collection, addDoc } from "firebase/firestore";
 
 const Support = () => {
   const [formData, setFormData] = useState({ name: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    // Later: send formData to backend
+    // Send form data to Firestore
+    try {
+      await addDoc(collection(db, 'supportQueries'), {
+        name: formData.name,
+        message: formData.message,
+        timestamp: new Date(), // Add timestamp for sorting purposes
+      });
+      setSubmitted(true);
+    } catch (error) {
+      console.error("Error submitting query: ", error);
+    }
   };
 
   return (
@@ -25,7 +36,7 @@ const Support = () => {
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           />
           <textarea
-            placeholder="Your Message"
+            placeholder="Your Message(also mention ur contact info)"
             className="w-full p-2 border rounded"
             value={formData.message}
             onChange={(e) => setFormData({ ...formData, message: e.target.value })}
@@ -38,3 +49,4 @@ const Support = () => {
 };
 
 export default Support;
+

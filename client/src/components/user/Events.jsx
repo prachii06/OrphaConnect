@@ -1,57 +1,82 @@
-import React from 'react';
+import { useState, useEffect } from "react";
+import { db, auth } from "../../firebase";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  query,
+  where,
+} from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 
 const Events = () => {
-  const events = [
-    {
-      id: 1,
-      title: 'Annual Cultural Evening',
-      description: 'An evening of dance, music, and performances by children from our homes.',
-      date: '2025-05-15',
-      time: '6:00 PM - 9:00 PM',
-      location: 'Town Hall, Surat',
-      registerLink: '#',
-    },
-    {
-      id: 2,
-      title: 'Summer Donation Drive',
-      description: 'We’re collecting clothes, toys, and books for children this summer.',
-      date: '2025-05-20',
-      time: '10:00 AM - 4:00 PM',
-      location: 'Hope Foundation Campus, Ahmedabad',
-      registerLink: '#',
-    },
-    {
-      id: 3,
-      title: 'Volunteer Orientation Program',
-      description: 'Interested in volunteering? Join our session to get started.',
-      date: '2025-05-25',
-      time: '11:00 AM - 1:00 PM',
-      location: 'Online (Google Meet)',
-      registerLink: '#',
-    },
-  ];
+  const [events, setEvents] = useState([]);
+  const [user, setUser] = useState(null);
+  const [registeredEvents, setRegisteredEvents] = useState([]);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      if (user) fetchRegistrations(user.uid);
+    });
+
+    fetchEvents();
+    return () => unsub();
+  }, []);
+
+  const fetchEvents = async () => {
+    const snapshot = await getDocs(collection(db, "events"));
+    setEvents(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+  };
+
+  const fetchRegistrations = async (userId) => {
+    const q = query(
+      collection(db, "registrations"),
+      where("userId", "==", userId)
+    );
+    const snapshot = await getDocs(q);
+    setRegisteredEvents(snapshot.docs.map((doc) => doc.data().eventId));
+  };
+
+  const handleRegister = async (eventId) => {
+    if (!user || registeredEvents.includes(eventId)) return;
+
+    await addDoc(collection(db, "registrations"), {
+      eventId,
+      userId: user.uid,
+      registeredAt: new Date(),
+    });
+
+    setRegisteredEvents([...registeredEvents, eventId]); // update UI
+  };
 
   return (
     <div className="p-6">
-      <h2 className="text-3xl font-bold mb-6 text-indigo-700 text-center">Join Our Upcoming Public Events</h2>
-      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2">
-        {events.map((event) => (
-          <div key={event.id} className="bg-white rounded-xl shadow-md p-6 border hover:shadow-lg transition">
-            <h3 className="text-xl font-semibold text-indigo-800">{event.title}</h3>
-            <p className="text-gray-700 mt-2">{event.description}</p>
-            <p className="text-sm text-gray-500 mt-3">
-              <strong>Date:</strong> {event.date} | <strong>Time:</strong> {event.time}
-            </p>
-            <p className="text-sm text-gray-600"><strong>Location:</strong> {event.location}</p>
-            <a
-              href={event.registerLink}
-              className="inline-block mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
-            >
-              Register / Learn More
-            </a>
-          </div>
-        ))}
-      </div>
+      <h2 className="text-2xl font-bold mb-4">Available Events</h2>
+      {events.map((event) => (
+        <div
+          key={event.id}
+          className="mb-4 border p-4 rounded-lg shadow bg-white"
+        >
+          <h3 className="text-lg font-semibold">{event.title}</h3>
+          <p>{event.description}</p>
+          <p className="text-sm text-gray-600">Date: {event.date}</p>
+
+          <button
+            onClick={() => handleRegister(event.id)}
+            disabled={registeredEvents.includes(event.id)}
+            className={`mt-2 px-4 py-1 rounded ${
+              registeredEvents.includes(event.id)
+                ? "bg-green-100 text-green-600 cursor-not-allowed"
+                : "bg-blue-600 text-white hover:bg-blue-700"
+            }`}
+          >
+            {registeredEvents.includes(event.id)
+              ? "Registered"
+              : "Register"}
+          </button>
+        </div>
+      ))}
     </div>
   );
 };
