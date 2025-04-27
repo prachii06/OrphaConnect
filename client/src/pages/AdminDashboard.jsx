@@ -4,7 +4,7 @@ import { Link, Outlet } from 'react-router-dom';
 const AdminDashboard = () => {
   return (
     <div className="flex h-screen">
-      {/* Sidebar */}
+      {/* sidebar */}
       <div className="w-1/4 bg-indigo-800 text-white p-5 h-full">
         <h2 className="text-xl font-semibold">Admin Dashboard</h2>
         <ul className="mt-5 space-y-4">
@@ -17,7 +17,7 @@ const AdminDashboard = () => {
         </ul>
       </div>
 
-      {/* Content Area */}
+      {/*content*/}
       <div className="flex-1 p-5 overflow-auto">
         <Outlet />
       </div>

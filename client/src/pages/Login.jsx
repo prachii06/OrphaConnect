@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { auth, db } from '../firebase'; 
 import { doc, getDoc } from 'firebase/firestore';
 
@@ -20,7 +20,7 @@ const Login = () => {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Check user in Firestore (users collection)
+      //checking user in database
       const userRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(userRef);
 
@@ -29,9 +29,9 @@ const Login = () => {
         
         // If user is admin and approved
         if (userData.role === 'admin' && userData.approved === true) {
-          navigate('/admin-dashboard');  // Admin Dashboard
+          navigate('/admin-dashboard');  
         } else if (userData.role === 'user') {
-          navigate('/user-dashboard');  // User Dashboard
+          navigate('/user-dashboard'); 
         } else {
           setError('You are not approved yet or not registered as a user.');
         }
@@ -46,35 +46,35 @@ const Login = () => {
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
+  // const handleGoogleSignIn = async () => {
+  //   const provider = new GoogleAuthProvider();
+  //   try {
+  //     const result = await signInWithPopup(auth, provider);
+  //     const user = result.user;
 
-      // Check user in Firestore (users collection)
-      const userRef = doc(db, 'users', user.uid);
-      const docSnap = await getDoc(userRef);
+  //     // Check user in Firestore (users collection)
+  //     const userRef = doc(db, 'users', user.uid);
+  //     const docSnap = await getDoc(userRef);
 
-      if (docSnap.exists()) {
-        const userData = docSnap.data();
+  //     if (docSnap.exists()) {
+  //       const userData = docSnap.data();
 
-        // If user is admin and approved
-        if (userData.role === 'admin' && userData.approved === true) {
-          navigate('/admin-dashboard');  // Admin Dashboard
-        } else if (userData.role === 'user') {
-          navigate('/user-dashboard');  // User Dashboard
-        } else {
-          setError('You are not approved yet or not registered as a user.');
-        }
-      } else {
-        setError('User not found!');
-      }
-    } catch (err) {
-      setError('Google login failed. Please try again.');
-      console.error(err.message);
-    }
-  };
+  //       // If user is admin and approved
+  //       if (userData.role === 'admin' && userData.approved === true) {
+  //         navigate('/admin-dashboard');  // Admin Dashboard
+  //       } else if (userData.role === 'user') {
+  //         navigate('/user-dashboard');  // User Dashboard
+  //       } else {
+  //         setError('You are not approved yet or not registered as a user.');
+  //       }
+  //     } else {
+  //       setError('User not found!');
+  //     }
+  //   } catch (err) {
+  //     setError('Google login failed. Please try again.');
+  //     console.error(err.message);
+  //   }
+  // };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-indigo-100 px-4">
@@ -129,21 +129,20 @@ const Login = () => {
           </span>
         </p>
 
-        <div className="mt-6 text-center">
+        {/* <div className="mt-6 text-center">
           <button
             onClick={handleGoogleSignIn}
             className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-700"
           >
             Login with Google
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );
 };
 
 export default Login;
-
 
 
 
