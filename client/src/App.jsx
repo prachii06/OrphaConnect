@@ -16,6 +16,7 @@ import ManageEvents from './components/admin/ManageEvents';
 import ManageDonations from './components/admin/ManageDonations';
 import ViewReports from './components/admin/ViewReports';
 import Settings from './components/admin/Settings';
+import Requests from './components/admin/Requests';
 
 
 // User routes
@@ -52,6 +53,7 @@ function App() {
         <Route path="donations" element={<ManageDonations />} />
         <Route path="reports" element={<ViewReports />} />
         <Route path="settings" element={<Settings />} />
+        <Route path="requests" element={<Requests />} />
       </Route>
     </Routes>
   );

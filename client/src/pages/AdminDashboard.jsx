@@ -13,6 +13,7 @@ const AdminDashboard = () => {
           <li><Link to="donations" className="hover:text-gray-200">Manage Donations</Link></li>
           <li><Link to="reports" className="hover:text-gray-200">View Reports</Link></li>
           <li><Link to="settings" className="hover:text-gray-200">Settings</Link></li>
+          <li><Link to="requests" className="hover:text-gray-200">Requests</Link></li>
         </ul>
       </div>
 
