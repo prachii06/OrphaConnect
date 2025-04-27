@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 
 import Home from './pages/Home';
 import Login from './pages/Login';
+import Gallery from './pages/Gallery';
 // import Donate from './pages/Donation';
 import Profile from './pages/Profile';
 import Register from './pages/Register';
@@ -34,6 +35,7 @@ function App() {
       {/* <Route path="/donate" element={<Donation/>} /> */}
       <Route path="/children" element={<Profile />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/gallery"  element={<Gallery />} />
 
       {/* User Dashboard Routes */}
       <Route path="/user-dashboard" element={<UserDashboard />}>

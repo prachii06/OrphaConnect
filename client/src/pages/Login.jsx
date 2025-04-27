@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from '../firebase'; 
 import { doc, getDoc } from 'firebase/firestore';
+import { motion } from 'framer-motion';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -20,20 +21,22 @@ const Login = () => {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      //checking user in database
       const userRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(userRef);
 
       if (docSnap.exists()) {
         const userData = docSnap.data();
-        
-        // If user is admin and approved
-        if (userData.role === 'admin' && userData.approved === true) {
-          navigate('/admin-dashboard');  
+
+        if ((userData.role === 'admin' || userData.role === 'moderator') && userData.approved !== true) {
+          setError('Your account is awaiting approval.');
+        } else if (userData.role === 'admin') {
+          navigate('/admin-dashboard');
+        } else if (userData.role === 'moderator') {
+          navigate('/moderator-dashboard'); 
         } else if (userData.role === 'user') {
-          navigate('/user-dashboard'); 
+          navigate('/user-dashboard');
         } else {
-          setError('You are not approved yet or not registered as a user.');
+          setError('Invalid user role.');
         }
       } else {
         setError('User not found!');
@@ -46,39 +49,14 @@ const Login = () => {
     }
   };
 
-  // const handleGoogleSignIn = async () => {
-  //   const provider = new GoogleAuthProvider();
-  //   try {
-  //     const result = await signInWithPopup(auth, provider);
-  //     const user = result.user;
-
-  //     // Check user in Firestore (users collection)
-  //     const userRef = doc(db, 'users', user.uid);
-  //     const docSnap = await getDoc(userRef);
-
-  //     if (docSnap.exists()) {
-  //       const userData = docSnap.data();
-
-  //       // If user is admin and approved
-  //       if (userData.role === 'admin' && userData.approved === true) {
-  //         navigate('/admin-dashboard');  // Admin Dashboard
-  //       } else if (userData.role === 'user') {
-  //         navigate('/user-dashboard');  // User Dashboard
-  //       } else {
-  //         setError('You are not approved yet or not registered as a user.');
-  //       }
-  //     } else {
-  //       setError('User not found!');
-  //     }
-  //   } catch (err) {
-  //     setError('Google login failed. Please try again.');
-  //     console.error(err.message);
-  //   }
-  // };
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-indigo-100 px-4">
-      <div className="bg-white p-8 rounded-xl shadow-xl w-full max-w-md">
+      <motion.div 
+        initial={{ scale: 0.95, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.3 }}
+        className="bg-white p-8 rounded-xl shadow-xl w-full max-w-md"
+      >
         <h2 className="text-3xl font-bold text-indigo-700 text-center mb-6">Login</h2>
 
         <form onSubmit={handleLogin} className="space-y-5">
@@ -89,7 +67,7 @@ const Login = () => {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
               placeholder="Enter your email"
             />
           </div>
@@ -101,48 +79,34 @@ const Login = () => {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
               placeholder="Enter your password"
             />
           </div>
 
           {error && (
-            <div className="text-red-500 text-sm text-center">{error}</div>
+            <motion.p 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              className="text-red-500 text-sm"
+            >
+              {error}
+            </motion.p>
           )}
 
-          <button
+          <motion.button
             type="submit"
             disabled={loading}
-            className="w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition-all"
           >
             {loading ? 'Logging in...' : 'Login'}
-          </button>
+          </motion.button>
         </form>
-
-        <p className="mt-4 text-sm text-center text-gray-600">
-          Don’t have an account?{' '}
-          <span
-            className="text-indigo-600 hover:underline cursor-pointer"
-            onClick={() => navigate('/register')}
-          >
-            Register
-          </span>
-        </p>
-
-        {/* <div className="mt-6 text-center">
-          <button
-            onClick={handleGoogleSignIn}
-            className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-700"
-          >
-            Login with Google
-          </button>
-        </div> */}
-      </div>
+      </motion.div>
     </div>
   );
 };
 
 export default Login;
-
-
-
