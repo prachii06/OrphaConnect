@@ -112,7 +112,7 @@ function Home() {
 
         <div className="text-center max-w-lg mb-12">
           <p className="text-lg text-gray-700 mb-4">
-            At OrphanLink, we aim to make a lasting impact by connecting people who want to help orphanages,
+            At OrphaConnect, we aim to make a lasting impact by connecting people who want to help orphanages,
             children, and families in need. Together, we can create a brighter future!
           </p>
           <p className="text-lg text-gray-600">
