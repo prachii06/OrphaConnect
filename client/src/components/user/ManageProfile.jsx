@@ -1,80 +1,21 @@
-// import React, { useState } from 'react';
-
-// const ManageProfile = () => {
-//   const [formData, setFormData] = useState({
-//     name: 'Prachi Gohil',
-//     email: 'prachi@example.com',
-//     password: '',
-//   });
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     alert('Profile updated!');
-//   };
-
-//   return (
-//     <div className="p-6 max-w-md">
-//       <h2 className="text-xl font-bold mb-4">Manage Profile</h2>
-//       <form onSubmit={handleSubmit} className="space-y-4">
-//         <input
-//           className="w-full p-2 border rounded"
-//           type="text"
-//           value={formData.name}
-//           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-//           placeholder="Name"
-//         />
-//         <input
-//           className="w-full p-2 border rounded"
-//           type="email"
-//           value={formData.email}
-//           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-//           placeholder="Email"
-//         />
-//         <input
-//           className="w-full p-2 border rounded"
-//           type="password"
-//           value={formData.password}
-//           onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-//           placeholder="New Password"
-//         />
-//         <button type="submit" className="bg-indigo-600 text-white px-4 py-2 rounded">
-//           Update Profile
-//         </button>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default ManageProfile;
-
-
-
 import { useEffect, useState } from "react";
-import { auth, db, storage } from "../../firebase";
+import { auth, db } from "../../firebase";
 import {
   updateEmail,
   updatePassword,
   onAuthStateChanged,
 } from "firebase/auth";
-
 import {
   doc,
   getDoc,
   updateDoc,
 } from "firebase/firestore";
 
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-} from "firebase/storage";
-
 const ManageProfile = () => {
-  const [userData, setUserData] = useState({ name: "", phone: "", photoURL: "" });
+  const [userData, setUserData] = useState({ name: "", phone: "" });
   const [authUser, setAuthUser] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [photo, setPhoto] = useState(null);
   const [status, setStatus] = useState("");
 
   useEffect(() => {
@@ -100,14 +41,6 @@ const ManageProfile = () => {
           name: userData.name,
           phone: userData.phone,
         };
-
-        if (photo) {
-          const photoRef = ref(storage, `profile_photos/${authUser.uid}`);
-          await uploadBytes(photoRef, photo);
-          const url = await getDownloadURL(photoRef);
-          updateData.photoURL = url;
-          setUserData((prev) => ({ ...prev, photoURL: url }));
-        }
 
         await updateDoc(doc(db, "users", authUser.uid), updateData);
         setStatus("Profile updated successfully");
@@ -139,24 +72,7 @@ const ManageProfile = () => {
     <div className="p-6 max-w-xl mx-auto bg-white shadow rounded-lg">
       <h2 className="text-2xl font-bold mb-6">Manage Profile</h2>
 
-      <div className="mb-6 text-center">
-        {userData.photoURL ? (
-          <img
-            src={userData.photoURL}
-            alt="Profile"
-            className="w-24 h-24 rounded-full mx-auto mb-2 object-cover"
-          />
-        ) : (
-          <div className="w-24 h-24 bg-gray-300 rounded-full mx-auto mb-2" />
-        )}
-
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setPhoto(e.target.files[0])}
-          className="text-sm text-gray-700"
-        />
-      </div>
+      {/* Removed photo area completely */}
 
       <label className="block mb-1 text-sm font-medium">Name</label>
       <input

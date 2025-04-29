@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { collection, query, where, getDocs, doc, updateDoc } from 'firebase/firestore';
-import { db } from '../../firebase'; // Adjust path if needed
+import { db } from '../../firebase'; 
 
 const Requests = () => {
   const [requests, setRequests] = useState([]);
@@ -9,7 +9,7 @@ const Requests = () => {
   const fetchRequests = async () => {
     setLoading(true);
     try {
-      // Firestore query: only fetch admin users who are NOT approved
+  // only fetch admin users who are NOT approved
       const q = query(
         collection(db, 'users'),
         where('role', '==', 'admin'),
@@ -36,7 +36,7 @@ const Requests = () => {
       await updateDoc(userRef, { approved: true });
 
       alert('Admin request approved!');
-      fetchRequests(); // Refresh the list after approving
+      fetchRequests(); //refresh the list after approving
     } catch (error) {
       console.error('Error approving admin:', error);
       alert('Error approving admin.');
