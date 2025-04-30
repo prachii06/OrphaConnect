@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from '../firebase'; 
+import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { auth, db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { motion } from 'framer-motion';
 
@@ -11,6 +12,36 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [pageLoading, setPageLoading] = useState(true);
+
+  // Check Firebase auth state on component mount
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // User is signed in via Firebase
+        const userRef = doc(db, 'users', user.uid);
+        const docSnap = await getDoc(userRef);
+        
+        if (docSnap.exists()) {
+          const userData = docSnap.data();
+          navigateBasedOnRole(userData.role);
+        }
+      }
+      setPageLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [navigate]);
+
+  const navigateBasedOnRole = (role) => {
+    if (role === 'admin') {
+      navigate('/admin-dashboard');
+    } else if (role === 'moderator') {
+      navigate('/moderator-dashboard');
+    } else if (role === 'user') {
+      navigate('/user-dashboard');
+    }
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -29,14 +60,9 @@ const Login = () => {
 
         if ((userData.role === 'admin' || userData.role === 'moderator') && userData.approved !== true) {
           setError('Your account is awaiting approval.');
-        } else if (userData.role === 'admin') {
-          navigate('/admin-dashboard');
-        } else if (userData.role === 'moderator') {
-          navigate('/moderator-dashboard'); 
-        } else if (userData.role === 'user') {
-          navigate('/user-dashboard');
         } else {
-          setError('Invalid user role.');
+          // Firebase automatically persists the auth state
+          navigateBasedOnRole(userData.role);
         }
       } else {
         setError('User not found!');
@@ -48,6 +74,17 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  if (pageLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-indigo-100 px-4">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p className="mt-4 text-indigo-700">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-indigo-100 px-4">
