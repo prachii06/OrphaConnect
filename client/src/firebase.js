@@ -7,13 +7,13 @@ import { getStorage } from "firebase/storage";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDxCBHbEst3vnBQtWy4IRedwexWyo5rHt8",
-  authDomain: "orphaconnect.firebaseapp.com",
-  projectId: "orphaconnect",
-  storageBucket: "orphaconnect.firebasestorage.app",
-  messagingSenderId: "25715633428",
-  appId: "1:25715633428:web:40d1ee820ae9d7504de601",
-  measurementId: "G-9ZT561HPBC"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
