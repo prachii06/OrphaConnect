@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 import Home from './pages/Home';
@@ -9,7 +9,7 @@ import Profile from './pages/Profile';
 import Register from './pages/Register';
 import UserDashboard from './pages/UserDashboard';
 import AdminDashboard from './pages/AdminDashboard';
-import ModeratorDashboard from './pages/ModeratorDashboard';
+// import ModeratorDashboard from './pages/ModeratorDashboard';
 
 // Admin routes
 import ManageUsers from './components/admin/ManageUsers';
