@@ -27,6 +27,8 @@ import Support from './components/user/Support';
 import VolunteerReg from './components/user/VolunteerReg';
 import Donate from './components/user/Donate';
 
+import AdminProtectedRoute from './components/shared/AdminProtectedRoute';
+
 function App() {
   return (
     <Routes>
@@ -49,7 +51,14 @@ function App() {
      
 
       {/* Admin Dashboard Routes */}
-      <Route path="/admin-dashboard" element={<AdminDashboard />}>
+<Route 
+        path="/admin-dashboard" 
+        element={
+          <AdminProtectedRoute>
+            <AdminDashboard />
+          </AdminProtectedRoute>
+        }
+      >
         <Route path="users" element={<ManageUsers />} />
         <Route path="events" element={<ManageEvents />} />
         <Route path="donations" element={<ManageDonations />} />

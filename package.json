@@ -4,6 +4,7 @@
     "firebase": "^11.6.0",
     "framer-motion": "^12.6.5",
     "multiparty": "^4.2.3",
+    "react-firebase-hooks": "^5.1.1",
     "react-router-dom": "^6.30.0"
   },
   "devDependencies": {
