@@ -151,13 +151,13 @@
 // export default Register;
 
 
-// import React, { useState } from 'react';
-// import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-// import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
-// import { auth, db } from '../firebase'; // Make sure this path is correct
-// import { useNavigate } from 'react-router-dom';
-// import { motion } from 'framer-motion';
-// import { getFunctions, httpsCallable } from 'firebase/functions';
+import React, { useState } from 'react';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { auth, db } from '../firebase'; // Make sure this path is correct
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { getFunctions, httpsCallable } from 'firebase/functions';
 
 
 const Register = () => {
