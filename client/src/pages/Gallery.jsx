@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
+import HomeButton from "../components/HomeButton";
 
 const Gallery = () => {
   const [images, setImages] = useState([]);
@@ -30,6 +31,7 @@ const Gallery = () => {
 
   return (
     <div className="max-w-6xl bg-gray-100 mx-auto p-6">
+      <HomeButton />
       <h1 className="text-3xl font-bold mb-6 text-center text-blue-800">
         Orphanage Photo Gallery
       </h1>

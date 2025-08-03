@@ -29,9 +29,12 @@ import Donate from './components/user/Donate';
 
 import AdminProtectedRoute from './components/shared/AdminProtectedRoute';
 
+import HomeButton from './components/HomeButton';
+
 function App() {
   return (
     <Routes>
+
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       {/* <Route path="/donate" element={<Donation/>} /> */}
@@ -46,6 +49,7 @@ function App() {
         <Route path="support" element={<Support />} />
         <Route path="volunteer" element={<VolunteerReg />} />
         <Route path="donate" element={<Donate />} />
+        <Route path="home" element={<HomeButton />} />
       </Route>
 
      

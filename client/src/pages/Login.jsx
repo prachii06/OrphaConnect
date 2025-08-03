@@ -7,6 +7,7 @@ import { auth, db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { motion } from 'framer-motion';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import HomeButton from '../components/HomeButton';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -110,7 +111,9 @@ const Login = () => {
 
   // Else show login form
   return (
+
     <div className="min-h-screen flex items-center justify-center bg-indigo-100 px-4">
+      <HomeButton />
       <motion.div
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}

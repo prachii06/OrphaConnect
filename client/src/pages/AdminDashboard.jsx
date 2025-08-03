@@ -1,9 +1,12 @@
 import React from 'react';
 import { Link, Outlet } from 'react-router-dom';
+import Home from './Home';
+import HomeButton from '../components/HomeButton';
 
 const AdminDashboard = () => {
   return (
     <div className="flex h-screen">
+      <HomeButton />
       {/* sidebar */}
       <div className="w-1/4 bg-indigo-800 text-white p-5 h-full">
         <h2 className="text-xl font-semibold">Admin Dashboard</h2>

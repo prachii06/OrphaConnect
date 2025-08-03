@@ -4,6 +4,7 @@ import { Link, Outlet } from 'react-router-dom';
 const UserDashboard = () => {
   return (
     <div className="flex h-screen">
+      <HomeButton />
       {/* Sidebar */}
       <div className="w-1/4 bg-indigo-800 text-white p-5 h-full">
         <h2 className="text-xl font-semibold">User Dashboard</h2>
