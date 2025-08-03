@@ -150,19 +150,12 @@
 
 // export default Register;
 
-
-// Register.jsx
 import React, { useState } from 'react';
-import {
-  createUserWithEmailAndPassword,
-  updateProfile,
-  signOut,
-} from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile, signOut } from 'firebase/auth';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { getFunctions, httpsCallable } from 'firebase/functions';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -203,10 +196,6 @@ const Register = () => {
           status: 'approved',
           createdAt: serverTimestamp(),
         };
-
-        const functions = getFunctions();
-        const setAdminClaim = httpsCallable(functions, 'setInitialAdminClaim');
-        await setAdminClaim({ uid: user.uid });
       } else {
         const isRequestingAdmin = role === 'admin';
         userData = {
@@ -221,8 +210,8 @@ const Register = () => {
       }
 
       await setDoc(doc(db, 'users', user.uid), userData);
+      await signOut(auth);
 
-      await signOut(auth); // 🔒 Force logout
       if (isDeveloperAdmin) {
         alert('Admin registered successfully. Please log in.');
         navigate('/login');
@@ -250,11 +239,43 @@ const Register = () => {
       >
         <h2 className="text-2xl font-bold text-center text-indigo-600 mb-4">Register</h2>
         <form onSubmit={handleRegister} className="space-y-4">
-          <input type="text" placeholder="Name" value={name} required onChange={(e) => setName(e.target.value)} className="w-full px-4 py-2 border rounded-lg" />
-          <input type="email" placeholder="Email" value={email} required onChange={(e) => setEmail(e.target.value)} className="w-full px-4 py-2 border rounded-lg" />
-          <input type="password" placeholder="Password" value={password} required onChange={(e) => setPassword(e.target.value)} className="w-full px-4 py-2 border rounded-lg" />
-          <input type="text" placeholder="Phone number" value={phoneNumber} required onChange={(e) => setPhoneNumber(e.target.value)} className="w-full px-4 py-2 border rounded-lg" />
-          <select value={role} onChange={(e) => setRole(e.target.value)} className="w-full px-4 py-2 border rounded-lg">
+          <input
+            type="text"
+            placeholder="Name"
+            value={name}
+            required
+            onChange={(e) => setName(e.target.value)}
+            className="w-full px-4 py-2 border rounded-lg"
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            required
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full px-4 py-2 border rounded-lg"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            required
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-4 py-2 border rounded-lg"
+          />
+          <input
+            type="text"
+            placeholder="Phone number"
+            value={phoneNumber}
+            required
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            className="w-full px-4 py-2 border rounded-lg"
+          />
+          <select
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            className="w-full px-4 py-2 border rounded-lg"
+          >
             <option value="user">User</option>
             <option value="admin">Request Admin Access</option>
           </select>
@@ -262,7 +283,11 @@ const Register = () => {
           {error && <p className="text-red-500 text-sm">{error}</p>}
           {successMessage && <p className="text-green-500 text-sm">{successMessage}</p>}
 
-          <button type="submit" disabled={loading} className="w-full bg-indigo-600 text-white py-2 rounded-lg">
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-indigo-600 text-white py-2 rounded-lg"
+          >
             {loading ? 'Registering...' : 'Register'}
           </button>
         </form>

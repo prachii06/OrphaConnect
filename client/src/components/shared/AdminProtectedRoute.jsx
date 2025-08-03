@@ -1,43 +1,42 @@
-
-
 import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { Navigate } from 'react-router-dom';
-import { auth } from '../../firebase';
+import { auth, db } from '../../firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 const AdminProtectedRoute = ({ children }) => {
   const [user, loading] = useAuthState(auth);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isChecking, setIsChecking] = useState(true);
+  const [isApprovedAdmin, setIsApprovedAdmin] = useState(false);
+  const [checkingStatus, setCheckingStatus] = useState(true);
 
   useEffect(() => {
-    const checkAdminStatus = async () => {
+    const checkAdminApproval = async () => {
       if (user) {
-        const idTokenResult = await user.getIdTokenResult(true); // Force refresh
-        // This is the critical check for the secure claim
-        if (idTokenResult.claims.admin === true) {
-          setIsAdmin(true);
+        const docRef = doc(db, 'users', user.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists() && docSnap.data().status === "approved"){
+          setIsApprovedAdmin(true);
         } else {
-          setIsAdmin(false);
+          setIsApprovedAdmin(false);
         }
       }
-      setIsChecking(false);
+      setCheckingStatus(false);
     };
 
     if (!loading) {
-      checkAdminStatus();
+      checkAdminApproval();
     }
   }, [user, loading]);
 
-  if (loading || isChecking) {
-    return <div>Loading...</div>; 
+  if (loading || checkingStatus) {
+    return <div>Loading...</div>;
   }
 
-  if (!user || !isAdmin) {
+  if (!user || !isApprovedAdmin) {
     return <Navigate to="/login" replace />;
   }
 
-  // If they are an admin, show the page
   return children;
 };
 
