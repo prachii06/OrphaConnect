@@ -13,7 +13,7 @@ const Requests = () => {
       const q = query(
         collection(db, 'users'),
         where('role', '==', 'admin'),
-        where('approved', '==', false)
+        where('status', '==', 'approved')
       );
 
       const snapshot = await getDocs(q);

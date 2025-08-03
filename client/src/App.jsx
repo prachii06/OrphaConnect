@@ -28,6 +28,7 @@ import VolunteerReg from './components/user/VolunteerReg';
 import Donate from './components/user/Donate';
 
 import AdminProtectedRoute from './components/shared/AdminProtectedRoute';
+import UserProtectedRoute from './components/shared/UserProtectedRoute';
 
 import HomeButton from './components/HomeButton';
 
@@ -43,14 +44,21 @@ function App() {
       <Route path="/gallery"  element={<Gallery />} />
 
       {/* User Dashboard Routes */}
-      <Route path="/user-dashboard" element={<UserDashboard />}>
-        <Route path="events" element={<Events />} />
-        <Route path="profile" element={<ManageProfile />} />
-        <Route path="support" element={<Support />} />
-        <Route path="volunteer" element={<VolunteerReg />} />
-        <Route path="donate" element={<Donate />} />
-        <Route path="home" element={<HomeButton />} />
-      </Route>
+<Route
+  path="/user-dashboard"
+  element={
+    <UserProtectedRoute>
+      <UserDashboard />
+    </UserProtectedRoute>
+  }
+>
+  <Route path="events" element={<Events />} />
+  <Route path="profile" element={<ManageProfile />} />
+  <Route path="support" element={<Support />} />
+  <Route path="volunteer" element={<VolunteerReg />} />
+  <Route path="donate" element={<Donate />} />
+  <Route path="home" element={<HomeButton />} />
+</Route>
 
      
 

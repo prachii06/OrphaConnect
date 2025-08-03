@@ -19,7 +19,7 @@ const Gallery = () => {
       setImages(imageData);
     } catch (err) {
       console.error("Error fetching gallery images:", err);
-      setError("Failed to load gallery. Please try again later.");
+      setError("Failed to load gallery. you must be loggedin to perform this action.");
     } finally {
       setLoading(false);
     }
