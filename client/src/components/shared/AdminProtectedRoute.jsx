@@ -15,7 +15,7 @@ const AdminProtectedRoute = ({ children }) => {
         const docRef = doc(db, 'users', user.uid);
         const docSnap = await getDoc(docRef);
 
-        if (docSnap.exists() && docSnap.data().status === "approved"){
+        if (docSnap.exists() && docSnap.data().status === "approved" && docSnap.data.role === "admin"){
           setIsApprovedAdmin(true);
         } else {
           setIsApprovedAdmin(false);
