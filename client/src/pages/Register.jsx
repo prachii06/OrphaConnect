@@ -6,6 +6,7 @@ import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import HomeButton from '../components/HomeButton';
 
 const Register = () => {
   const navigate = useNavigate();
