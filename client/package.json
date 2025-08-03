@@ -10,11 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "multiparty": "^4.2.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-firebase-hooks": "^5.1.1",
     "react-router-dom": "^6.30.0",
-    "uuid": "^11.1.0",
-    "multiparty": "^4.2.3"
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
