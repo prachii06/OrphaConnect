@@ -1,8 +1,8 @@
-built a web application using React.js with Vite as the build tool and integrated Firebase for backend services such as authentication and firestore
+built a web application using React.js with Vite as the build tool and integrated Firebase - authentication and firestore
 
 #DEPLOYMENT:
--deployed this static site to AWS S3 and set up CloudFront as a CDN for faster,secure global delivery.
-& vercel
+-deployed this static site on AWS S3 and set up CloudFront as a CDN for faster,secure global delivery.
+
 
 #LINKS:
 vercel: https://orpha-h5ns.vercel.app/
